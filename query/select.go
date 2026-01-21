@@ -1042,14 +1042,14 @@ func (q *SelectQuery) Scan(ctx context.Context, dest ...any) error {
 }
 
 // Count returns the count of rows.
-func (q *SelectQuery) Count(ctx context.Context) (int64, error) {
+func (q *SelectQuery) Count(ctx context.Context) (uint64, error) {
 	countQuery := q.Clone()
 	countQuery.columns = []QueryWithArgs{{Query: "count(*)"}}
 	countQuery.orderBy = nil
 	countQuery.limit = nil
 	countQuery.offset = nil
 
-	var count int64
+	var count uint64
 	err := countQuery.Scan(ctx, &count)
 	return count, err
 }
