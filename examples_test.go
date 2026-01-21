@@ -1,4 +1,4 @@
-package ch_test
+package chx_test
 
 import (
 	"fmt"
