@@ -1,6 +1,6 @@
 module github.com/ManiacMaxo/chx
 
-go 1.25
+go 1.24.0
 
 require github.com/ClickHouse/clickhouse-go/v2 v2.42.0
 

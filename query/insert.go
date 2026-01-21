@@ -324,7 +324,7 @@ func (q *InsertQuery) Batch(ctx context.Context) (driver.Batch, error) {
 	}
 
 	// SETTINGS
-	args = q.buildSettingsClause(&sb, args)
+	_ = q.buildSettingsClause(&sb, args)
 
 	sql := sb.String()
 

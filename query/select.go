@@ -73,7 +73,6 @@ type SelectQuery struct {
 type columnModifier struct {
 	modType string // "APPLY", "EXCEPT", "REPLACE"
 	expr    string
-	args    []any
 }
 
 // windowDef represents a WINDOW clause definition.
@@ -858,9 +857,10 @@ func (q *SelectQuery) Build() (string, []any, error) {
 			if o.direction == Desc {
 				sb.WriteString(" DESC")
 			}
-			if o.nulls == NullsFirst {
+			switch o.nulls {
+			case NullsFirst:
 				sb.WriteString(" NULLS FIRST")
-			} else if o.nulls == NullsLast {
+			case NullsLast:
 				sb.WriteString(" NULLS LAST")
 			}
 			if o.collate != "" {

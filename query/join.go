@@ -64,17 +64,6 @@ func newJoinBuilder(parent *SelectQuery, joinType JoinType, table string) *JoinB
 	}
 }
 
-// newJoinBuilderExpr creates a new JOIN builder with a raw expression.
-func newJoinBuilderExpr(parent *SelectQuery, joinType JoinType, expr string, args ...any) *JoinBuilder {
-	return &JoinBuilder{
-		parent: parent,
-		join: &joinClause{
-			joinType: joinType,
-			table:    QueryWithArgs{Query: expr, Args: args},
-		},
-	}
-}
-
 // Global sets the GLOBAL modifier for distributed queries.
 func (b *JoinBuilder) Global() *JoinBuilder {
 	b.join.global = true

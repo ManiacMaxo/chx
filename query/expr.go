@@ -73,7 +73,7 @@ func NotIn[T any](values []T) NotInExpr {
 
 // Build builds the NOT IN expression.
 func (e NotInExpr) Build() (string, []any) {
-	in := InExpr{Values: e.Values}
+	in := InExpr(e)
 	return in.Build()
 }
 
