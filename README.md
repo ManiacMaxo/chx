@@ -311,6 +311,44 @@ debugSQL := client.Select("id", "name").
     String()
 ```
 
+## Auto-Reconnection
+
+`RetryClient` wraps a `Client` with automatic reconnection on transient network errors. It implements the same `Executor` interface, so all query builders work transparently.
+
+```go
+rc, err := ch.OpenWithRetry(&clickhouse.Options{
+    Addr: []string{"localhost:9000"},
+}, ch.RetryConfig{
+    MaxRetries: 3, // 0 uses default (3)
+})
+if err != nil {
+    log.Fatal(err)
+}
+defer rc.Close()
+
+// All query builders work the same — retries happen transparently
+rows, err := rc.Select("id", "name").
+    From("users").
+    Query(ctx)
+
+// Access the underlying *Client if needed
+rc.Client()
+```
+
+### Configuration
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `MaxRetries` | `3` | Maximum number of retry attempts |
+| `InitialDelay` | `100ms` | Delay before first retry |
+| `MaxDelay` | `5s` | Maximum backoff delay |
+| `RetryExec` | `false` | Enable retries for `Exec`/`PrepareBatch` (write operations) |
+| `IsRetryable` | built-in | Custom function to classify retryable errors |
+
+Uses exponential backoff (doubles each attempt, capped at `MaxDelay`). Thread-safe for concurrent use.
+
+By default, only `Query`, `QueryRow`, and `Ping` are retried. Set `RetryExec: true` to also retry `Exec` and `PrepareBatch` (be mindful of idempotency).
+
 ## ClickHouse Features Support
 
 | Feature | Status |

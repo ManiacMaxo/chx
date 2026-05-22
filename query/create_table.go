@@ -139,6 +139,14 @@ func (q *CreateTableQuery) ReplacingMergeTree(ver ...string) *CreateTableQuery {
 	return q.Engine("ReplacingMergeTree()")
 }
 
+// CoalescingMergeTree sets CoalescingMergeTree engine.
+func (q *CreateTableQuery) CoalescingMergeTree(columns ...string) *CreateTableQuery {
+	if len(columns) > 0 {
+		return q.Engine(fmt.Sprintf("CoalescingMergeTree((%s))", strings.Join(columns, ", ")))
+	}
+	return q.Engine("CoalescingMergeTree()")
+}
+
 // SummingMergeTree sets SummingMergeTree engine.
 func (q *CreateTableQuery) SummingMergeTree(columns ...string) *CreateTableQuery {
 	if len(columns) > 0 {
